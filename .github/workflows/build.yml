@@ -10,7 +10,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install yaml2json
         run: python3 -m pip install remarshal
       - id: set-matrix
@@ -68,6 +68,8 @@ jobs:
         run: west update
       - name: West Zephyr export
         run: west zephyr-export
+      - name: Install distutils compatibility (Python 3.12 fix)
+        run: pip install setuptools
       - name: West Build (${{ steps.variables.outputs.display-name }})
         run: |
           west build -s zmk/app -b ${{ matrix.board }} -- -DZMK_CONFIG=${GITHUB_WORKSPACE}/config ${{ steps.variables.outputs.extra-cmake-args }} ${{ matrix.cmake-args }}
